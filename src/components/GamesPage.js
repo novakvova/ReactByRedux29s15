@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import GamesList from "./GamesList";
 import { fetchGames  } from "../actions";
+import { Link } from "react-router-dom";
 
 class GamesPage extends Component {
     state = {  }
@@ -16,6 +17,7 @@ class GamesPage extends Component {
         return ( 
         <div>
             <h1>Page Games</h1>
+            <Link to="/games/new" className="btn btn-success">Додати гру</Link>
             <GamesList games={this.props.games}/>
         </div> 
         );

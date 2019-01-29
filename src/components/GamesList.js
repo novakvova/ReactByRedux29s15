@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import GameCard from './GameCard';
 
 class GamesList extends Component {
     state = {  }
@@ -11,7 +12,9 @@ class GamesList extends Component {
             <p>Список пустий</p>
         );
         const gamesList = (
-            <p>Список ігор</p>
+            <div className="row">
+                {games.map(item => <GameCard game={item} key={item.id}/>)}
+            </div>
         );
         return ( 
             <div>

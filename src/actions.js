@@ -12,8 +12,11 @@ export function setGames(games) {
 
 export function fetchGames() {
     return dispatch => {
-        fetch('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
+        fetch('http://localhost:64729/api/game')
         .then(res => res.json())
-        .then(data => dispatch(setGames(data)));
+        .then(data => dispatch(setGames(data)))
+        .catch(err => {
+            console.log("-----Bad request----", err);
+        });
     }
 }
