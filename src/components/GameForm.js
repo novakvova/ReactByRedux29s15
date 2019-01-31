@@ -1,6 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
-import axios from "axios";
+import { connect } from 'react-redux';
+import { saveGame } from '../actions';
+import { Redirect } from 'react-router';
 
 class GameForm extends React.Component {
     state = {
@@ -10,7 +12,8 @@ class GameForm extends React.Component {
         errors: {
             //title: 'Обовязкове поле'
         },
-        loading: false
+        loading: false,
+        done: false
     }
     setStateByErrors=(name, value) => {
         if (!!this.state.errors[name]) {
@@ -68,14 +71,17 @@ class GameForm extends React.Component {
                 image: this.state.image,
                 description: this.state.description
             };
-            //axios.get()
-            //axios.put()
-            axios.post('http://localhost:64729/api/Game', model)
-                .then(res => { console.log('--is good-', res); })
-                .catch(err => {
-                    //console.log('--FFSS--', err.response.data);
-                    this.setState({ errors: err.response.data });
-                });
+            this.props.saveGame(model)
+                .then(
+                    () => { 
+                        console.log("----Good Respnce----"); 
+                        this.setState({done: true});
+                    },
+                    (err) => { 
+                        this.setState({ errors: err.response.data }); 
+                        //console.log('--Bad REquest--', errors); 
+                    }
+                );
         }
         else
         {
@@ -87,10 +93,11 @@ class GameForm extends React.Component {
     render() { 
         console.log('---State in GameForm---', this.state);
         const { errors } = this.state;
-        console.log("!errors.title", !errors.title);
-        console.log("!!errors.title", !!errors.title);
-        console.log("errors.title", errors.title);
-        return (
+        //console.log("!errors.title", !errors.title);
+        //console.log("!!errors.title", !!errors.title);
+        //console.log("errors.title", errors.title);
+
+        const form = (
             <form onSubmit={this.onSubmitForm}>
                 <h1>Додати нову гру</h1>
 
@@ -145,8 +152,13 @@ class GameForm extends React.Component {
                     </div>
                 </div>
             </form>
-         );
+        );
+        return (
+            <div>
+              { this.state.done ? <Redirect to="/games"/> : form }
+            </div>
+          );
     }
 }
  
-export default GameForm;
+export default connect(null, {saveGame})(GameForm);
