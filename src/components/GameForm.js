@@ -8,25 +8,39 @@ class GameForm extends React.Component {
         image: '',
         description: '',
         errors: {
-            title: 'Обовязкове поле'
+            //title: 'Обовязкове поле'
         },
         loading: false
     }
-    handleChange=(e) => {
-        this.setState(
-            {
-                [e.target.name]: e.target.value
-            });
-    }
-    uploadImageBase64 = (evt) => {
+    setStateByErrors=(name, value) => {
+        if (!!this.state.errors[name]) {
+            let errors = Object.assign({}, this.state.errors);
+            delete errors[name];
+            this.setState(
+              {
+                [name]: value,
+                errors
+              }
+            )
+          }
+          else {
+            this.setState(
+              { [name]: value })
+          }
+    } 
 
+    handleChange=(e) => {
+        this.setStateByErrors(e.target.name, e.target.value);
+    }
+
+    uploadImageBase64 = (evt) => {
+        const {name} = evt.target;
         if (evt.target.files && evt.target.files[0]) {
             if (evt.target.files[0].type.match(/^image\//)) {
-                console.log("---Upload file---", evt.target.files[0]);
+                console.log("---Upload file---", evt.target);
                 var reader = new FileReader();
                 reader.onload = (e) => {
-                    this.setState({image: e.target.result});
-                    //console.log('---e.target.result---',e.target.result);
+                    this.setStateByErrors(name, e.target.result);
                 }
                 reader.readAsDataURL(evt.target.files[0]);
             }
@@ -41,73 +55,89 @@ class GameForm extends React.Component {
     onSubmitForm=(e) => {
         e.preventDefault();
 
-        let data = {
-            title: this.state.title,
-            image: this.state.image,
-            description: this.state.description
-        };
-        //axios.get()
-        //axios.put()
-        axios.post('http://localhost:64729/api/Game',data)
-        .then(res => { console.log('--is good-', res); })
-        .catch(err => { console.log('--FFSS--', err.response.data); });
-        // fetch('http://localhost:64729/api/Game',
-        //     {
-        //         method: 'POST',
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(data)
-        //     })
-        //     .then(res => {
-        //         console.log('---res---',res);
-        //         return res.json();
-        //     })
-        //     .then(resData => console.log('----resData----', resData))
-        //     .catch(err => console.log('--problem--', err));
+        //validation
+        let errors = {};
+        if (this.state.title === '') errors.title = "Cant't be empty!"
+        if (this.state.image === '') errors.image = "Cant't be empty!"
+        if (this.state.description === '') errors.description = "Cant't be empty!"
+        
+        const isValid=Object.keys(errors).length===0
+        if (isValid) {
+            let model = {
+                title: this.state.title,
+                image: this.state.image,
+                description: this.state.description
+            };
+            //axios.get()
+            //axios.put()
+            axios.post('http://localhost:64729/api/Game', model)
+                .then(res => { console.log('--is good-', res); })
+                .catch(err => {
+                    //console.log('--FFSS--', err.response.data);
+                    this.setState({ errors: err.response.data });
+                });
+        }
+        else
+        {
+            this.setState({ errors });
+        }
+
     }
 
     render() { 
         console.log('---State in GameForm---', this.state);
-        // console.log(!!this.state.errors.title);
+        const { errors } = this.state;
+        console.log("!errors.title", !errors.title);
+        console.log("!!errors.title", !!errors.title);
+        console.log("errors.title", errors.title);
         return (
             <form onSubmit={this.onSubmitForm}>
                 <h1>Додати нову гру</h1>
 
-                <div className={classnames('form-group',{'has-error': !!this.state.errors.title})}>
+                <div className={classnames('form-group', { 'has-error': !!errors.title })}>
                     <label htmlFor="title">Назва</label>
-                    <input type="text" 
-                        className="form-control" 
+                    <input type="text"
+                        className="form-control"
                         id="title"
                         name="title"
                         value={this.state.title}
-                        onChange={this.handleChange} 
+                        onChange={this.handleChange}
                         placeholder="Назва" />
-                        {!!this.state.errors.title ? <span className="help-block">Please supply a description of your project</span> : '' } 
+                    {!!errors.title ? <span className="help-block">{errors.title}</span> : ''}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="image">Фото</label>
-                    <input type="file"
-                        className="form-control" 
-                        id="image"
-                        name="image"
-                        
-                        onChange={this.uploadImageBase64} 
-                        placeholder="Фото" />
-                </div>
-
-                <div className="form-group">
+                
+                <div className={classnames('form-group', { 'has-error': !!errors.description })} >
                     <label htmlFor="description">Опис</label>
-                    <textarea type="text" 
-                        className="form-control" 
+                    <textarea type="text"
+                        className="form-control"
                         id="description"
                         name="description"
                         value={this.state.description}
-                        onChange={this.handleChange} 
+                        onChange={this.handleChange}
                         placeholder="Опис" />
+                    {!!errors.description ? <span className="help-block">{errors.description}</span> : ''}
                 </div>
+
+                <div className={classnames('form-group', { 'has-error': !!errors.image })}>
+                    <label htmlFor="image">Фото</label>
+                    <input type="file"
+                        className="form-control"
+                        id="image"
+                        name="image"
+                        onChange={this.uploadImageBase64}
+                        placeholder="Фото" />
+                    {!!errors.image ? <span className="help-block">{errors.image}</span> : ''}
+                </div>
+
+                    {
+                        this.state.image !== '' &&
+                        <div className="form-group">
+                            <span className="thumbnail col-md-2">
+                                <img src={this.state.image} alt="Image" />
+                            </span>
+                        </div>
+                    }
 
                 <div className="form-group">
                     <div className="col-md-4">
