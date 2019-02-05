@@ -28,6 +28,7 @@ export function saveGame(data){
     return dispatch => {
         return axios.post(`http://localhost:64729/api/Game`, data)
           .then(resp => {
+              //throw new Error('sss');
               console.log("---Data insert by Redux---", resp.data);
             dispatch(addGame(resp.data))
           });
@@ -39,6 +40,23 @@ export function fetchGames() {
         fetch('http://localhost:64729/api/game')
         .then(res => res.json())
         .then(data => dispatch(setGames(data)))
+        .catch(err => {
+            console.log("-----Bad request----", err);
+        });
+    }
+}
+
+export function gameFetched(game) {
+    return {
+        type: GAME_FETCHED,
+        game 
+    }
+}
+export function fetchGame(id) {
+    return dispatch => {
+        fetch(`http://localhost:64729/api/game/${id}`)
+        .then(res => res.json())
+        .then(data => dispatch(gameFetched(data)))
         .catch(err => {
             console.log("-----Bad request----", err);
         });

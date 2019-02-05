@@ -1,12 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { saveGame } from '../actions';
+import { saveGame, fetchGame } from '../actions';
 import { Redirect } from 'react-router';
 
 class GameForm extends React.Component {
     state = {
-        _id: this.props.game ? this.props.game.id : null,
+        id: this.props.game ? this.props.game.id : null,
         title: this.props.game ? this.props.game.title : '',
         image: this.props.game ? this.props.game.image : '',
         description: this.props.game ? this.props.game.description : '',
@@ -32,6 +32,22 @@ class GameForm extends React.Component {
               { [name]: value })
           }
     } 
+    componentDidMount=() => {
+        if(this.props.match.params.id) {
+            this.props.fetchGame(this.props.match.params.id);
+        }
+    }
+    //компонент получает новые props. 
+    //Этод метод не вызывается в момент первого render'a
+    componentWillReceiveProps = (nextProps) => {
+        //console.log('--Change propts---',nextProps);
+        this.setState({
+            id: nextProps.game.id,
+            title: nextProps.game.title,
+            image: nextProps.game.image,
+            description: nextProps.game.description
+        });
+    }
 
     handleChange=(e) => {
         this.setStateByErrors(e.target.name, e.target.value);
@@ -160,17 +176,17 @@ class GameForm extends React.Component {
     }
 }
 const mapStateToProps = (state, props) => {
-    if(props.match.params._id) {
+    if(props.match.params.id) {
         //console.log('--game forn Edit Redux--', state.games);
-        const { _id }=props.match.params;
+        const { id }=props.match.params;
         const { games } = state;
-        //console.log("----router param----",_id);
-        //console.log(state.games.find(item=>(item.id===_id)));
+       // console.log("----router param----",id);
+        //console.log(state.games.find(item=>(item.id===id)));
         return {
-            game: games.find(item=>(item.id==_id))
+            game: games.find(item=>(item.id==id))
         }
     } 
     return { game: null};
 } 
  
-export default connect(mapStateToProps, {saveGame})(GameForm);
+export default connect(mapStateToProps, {saveGame, fetchGame})(GameForm);
