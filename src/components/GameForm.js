@@ -6,9 +6,10 @@ import { Redirect } from 'react-router';
 
 class GameForm extends React.Component {
     state = {
-        title: '',
-        image: '',
-        description: '',
+        _id: this.props.game ? this.props.game.id : null,
+        title: this.props.game ? this.props.game.title : '',
+        image: this.props.game ? this.props.game.image : '',
+        description: this.props.game ? this.props.game.description : '',
         errors: {
             //title: 'Обовязкове поле'
         },
@@ -74,7 +75,7 @@ class GameForm extends React.Component {
             this.props.saveGame(model)
                 .then(
                     () => { 
-                        console.log("----Good Respnce----"); 
+                        //console.log("----Good Respnce----"); 
                         this.setState({done: true});
                     },
                     (err) => { 
@@ -89,14 +90,12 @@ class GameForm extends React.Component {
         }
 
     }
+    
 
     render() { 
-        console.log('---State in GameForm---', this.state);
+        console.log("this.props", this.props);
+        console.log("this.state", this.state);
         const { errors } = this.state;
-        //console.log("!errors.title", !errors.title);
-        //console.log("!!errors.title", !!errors.title);
-        //console.log("errors.title", errors.title);
-
         const form = (
             <form onSubmit={this.onSubmitForm}>
                 <h1>Додати нову гру</h1>
@@ -160,5 +159,18 @@ class GameForm extends React.Component {
           );
     }
 }
+const mapStateToProps = (state, props) => {
+    if(props.match.params._id) {
+        //console.log('--game forn Edit Redux--', state.games);
+        const { _id }=props.match.params;
+        const { games } = state;
+        //console.log("----router param----",_id);
+        //console.log(state.games.find(item=>(item.id===_id)));
+        return {
+            game: games.find(item=>(item.id==_id))
+        }
+    } 
+    return { game: null};
+} 
  
-export default connect(null, {saveGame})(GameForm);
+export default connect(mapStateToProps, {saveGame})(GameForm);

@@ -29,6 +29,7 @@ GamesPage.propTypes = {
 }
 
 function mapStateToProps(state) {
+    
     return {
         games: state.games
     }; 

@@ -18,8 +18,8 @@ class NavigationBar extends Component {
                     </div>
                     <div id="navbar" className="navbar-collapse collapse">
                         <ul className="nav navbar-nav">
-                            <li><a href="/counterpage">Counter</a></li>
-                            <li><a href="/games">Games</a></li>
+                            <li><Link to="/counterpage">Counter</Link></li>
+                            <li><Link to="/games">Games</Link></li>
                             <li><a href="#">Contact</a></li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
