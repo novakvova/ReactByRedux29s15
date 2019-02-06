@@ -5,7 +5,7 @@ import Counter from "./components/Counter";
 import CounterDecrement from "./components/CounterDecrement";
 import GamesPage from "./components/GamesPage";
 import CounterPage from "./components/CounterPage";
-import GameForm from "./components/GameForm";
+import GameFormPage from "./components/GameFormPage";
 
 import NavigationBar from "./NavigationBar";
 
@@ -21,8 +21,8 @@ class App extends Component {
         <Route exact path='/counterdec' component={CounterDecrement} />
         <Route exact path='/counterpage' component={CounterPage} />
         <Route exact path='/games' component={GamesPage} />
-        <Route exact path='/games/new' component={GameForm} />
-        <Route path='/game/:id'  component={GameForm} />
+        <Route exact path='/games/new' component={GameFormPage} />
+        <Route path='/game/:id'  component={GameFormPage} />
       </div>
     );
   }

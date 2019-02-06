@@ -1,8 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { connect } from 'react-redux';
-import { saveGame, fetchGame, updateGame } from '../actions';
-import { Redirect } from 'react-router';
+
 
 class GameForm extends React.Component {
     state = {
@@ -13,8 +11,7 @@ class GameForm extends React.Component {
         errors: {
             //title: 'Обовязкове поле'
         },
-        loading: false,
-        done: false
+        loading: false
     }
     setStateByErrors=(name, value) => {
         if (!!this.state.errors[name]) {
@@ -32,11 +29,7 @@ class GameForm extends React.Component {
               { [name]: value })
           }
     } 
-    componentDidMount=() => {
-        if(this.props.match.params.id) {
-            this.props.fetchGame(this.props.match.params.id);
-        }
-    }
+
     //компонент получает новые props. 
     //Этод метод не вызывается в момент первого render'a
     componentWillReceiveProps = (nextProps) => {
@@ -84,38 +77,15 @@ class GameForm extends React.Component {
         const isValid=Object.keys(errors).length===0
         if (isValid) {
             const {id, title, image, description} = this.state;
-            if(id) {
-                this.props.updateGame({id,title,image,description})
-                   .then(
-                        () => { 
-                            //console.log("----Good Respnce----"); 
-                            this.setState({done: true});
-                        },
-                        (err) => { 
-                            this.setState({ errors: err.response.data }); 
-                            //console.log('--Bad REquest--', errors); 
-                        }
-                    );
-            }
-            else {
-                this.props.saveGame({title, image, description})
-                .then(
-                    () => { 
-                        //console.log("----Good Respnce----"); 
-                        this.setState({done: true});
-                    },
-                    (err) => { 
-                        this.setState({ errors: err.response.data }); 
-                        //console.log('--Bad REquest--', errors); 
-                    }
-                );
-            }
+            this.props.saveGame({id, title, image, description})
+                .catch((err) => { 
+                    this.setState({ errors: err.response.data });
+                });
         }
         else
         {
             this.setState({ errors });
         }
-
     }
     
 
@@ -181,23 +151,10 @@ class GameForm extends React.Component {
         );
         return (
             <div>
-              { this.state.done ? <Redirect to="/games"/> : form }
+              { form }
             </div>
           );
     }
 }
-const mapStateToProps = (state, props) => {
-    if(props.match.params.id) {
-        //console.log('--game forn Edit Redux--', state.games);
-        const { id }=props.match.params;
-        const { games } = state;
-       // console.log("----router param----",id);
-        //console.log(state.games.find(item=>(item.id===id)));
-        return {
-            game: games.find(item=>(item.id==id))
-        }
-    } 
-    return { game: null};
-} 
- 
-export default connect(mapStateToProps, {saveGame, fetchGame, updateGame})(GameForm);
+
+export default GameForm;
