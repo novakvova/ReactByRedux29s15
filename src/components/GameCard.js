@@ -21,7 +21,7 @@ class GameCard extends Component {
                     </div>
                     <div>
                         <Link to={`/game/${game.id}`} className="btn btn-success">Edit</Link>
-                        {/* <Link to={`/game/${game.id}` className="btn btn-danger">Delete</div> */}
+                        <div className="btn btn-danger" onClick={()=>this.props.deleteGame(game.id)}>Delete</div>
                     </div>
                 </div>
             </div>
@@ -30,7 +30,8 @@ class GameCard extends Component {
 }
 
 GameCard.propTypes = {
-    game: PropTypes.object.isRequired
+    game: PropTypes.object.isRequired,
+    deleteGame: PropTypes.func.isRequired
 }
  
 export default GameCard;

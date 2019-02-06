@@ -37,6 +37,13 @@ export function gameUpdated(game) {
     }
 }
 
+export function gameDeleted(gameId) {
+    return {
+        type: GAME_DELETED,
+        gameId 
+    }
+}
+
 export function saveGame(data){
 
     return dispatch => {
@@ -80,4 +87,16 @@ export function fetchGame(id) {
             console.log("-----Bad request----", err);
         });
     }
+}
+
+export function deleteGame(id){
+
+    return dispatch => {
+        return axios.delete(`http://localhost:64729/api/Game/${id}`)
+          .then(resp => {
+              //throw new Error('sss');
+              console.log("---Data updated by Redux---", resp.data);
+            dispatch(gameDeleted(id))
+          });
+      };
 }

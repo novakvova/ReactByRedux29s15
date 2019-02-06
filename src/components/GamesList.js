@@ -13,7 +13,7 @@ class GamesList extends Component {
         );
         const gamesList = (
             <div className="row">
-                {games.map(item => <GameCard game={item} key={item.id}/>)}
+                {games.map(item => <GameCard game={item} key={item.id} deleteGame={this.props.deleteGame} />)}
             </div>
         );
         return ( 
@@ -26,7 +26,8 @@ class GamesList extends Component {
 }
 
 GamesList.propTypes = {
-    games: PropTypes.array.isRequired
+    games: PropTypes.array.isRequired,
+    deleteGame: PropTypes.func.isRequired
 };
  
 export default GamesList;
