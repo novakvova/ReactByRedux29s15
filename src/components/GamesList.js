@@ -18,6 +18,7 @@ class GamesList extends Component {
         );
         return ( 
             <div>
+                
                 {games.length===0 ? emptyMessage : gamesList}
             </div>
          );

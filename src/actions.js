@@ -23,6 +23,20 @@ export function addGame(game) {
     }
 }
 
+export function gameFetched(game) {
+    return {
+        type: GAME_FETCHED,
+        game 
+    }
+}
+
+export function gameUpdated(game) {
+    return {
+        type: GAME_UPDATED,
+        game 
+    }
+}
+
 export function saveGame(data){
 
     return dispatch => {
@@ -31,6 +45,17 @@ export function saveGame(data){
               //throw new Error('sss');
               console.log("---Data insert by Redux---", resp.data);
             dispatch(addGame(resp.data))
+          });
+      };
+}
+export function updateGame(data){
+
+    return dispatch => {
+        return axios.put(`http://localhost:64729/api/Game/${data.id}`, data)
+          .then(resp => {
+              //throw new Error('sss');
+              console.log("---Data updated by Redux---", resp.data);
+            dispatch(gameUpdated(resp.data))
           });
       };
 }
@@ -46,12 +71,6 @@ export function fetchGames() {
     }
 }
 
-export function gameFetched(game) {
-    return {
-        type: GAME_FETCHED,
-        game 
-    }
-}
 export function fetchGame(id) {
     return dispatch => {
         fetch(`http://localhost:64729/api/game/${id}`)

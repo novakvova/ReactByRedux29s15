@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { saveGame, fetchGame } from '../actions';
+import { saveGame, fetchGame, updateGame } from '../actions';
 import { Redirect } from 'react-router';
 
 class GameForm extends React.Component {
@@ -83,12 +83,22 @@ class GameForm extends React.Component {
         
         const isValid=Object.keys(errors).length===0
         if (isValid) {
-            let model = {
-                title: this.state.title,
-                image: this.state.image,
-                description: this.state.description
-            };
-            this.props.saveGame(model)
+            const {id, title, image, description} = this.state;
+            if(id) {
+                this.props.updateGame({id,title,image,description})
+                   .then(
+                        () => { 
+                            //console.log("----Good Respnce----"); 
+                            this.setState({done: true});
+                        },
+                        (err) => { 
+                            this.setState({ errors: err.response.data }); 
+                            //console.log('--Bad REquest--', errors); 
+                        }
+                    );
+            }
+            else {
+                this.props.saveGame({title, image, description})
                 .then(
                     () => { 
                         //console.log("----Good Respnce----"); 
@@ -99,6 +109,7 @@ class GameForm extends React.Component {
                         //console.log('--Bad REquest--', errors); 
                     }
                 );
+            }
         }
         else
         {
@@ -189,4 +200,4 @@ const mapStateToProps = (state, props) => {
     return { game: null};
 } 
  
-export default connect(mapStateToProps, {saveGame, fetchGame})(GameForm);
+export default connect(mapStateToProps, {saveGame, fetchGame, updateGame})(GameForm);
