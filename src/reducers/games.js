@@ -26,10 +26,11 @@ export default function games(state=[], action={}) {
             }
 
         case GAME_UPDATED:
+        //return Object.assign({}, state, action.game);
             return state.map(item => {
                 if (item.id == action.game.id) return action.game;
                 return item;
-            })
+            });
         default: return state;
     }
 }

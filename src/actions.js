@@ -22,21 +22,18 @@ export function addGame(game) {
         game
     }
 }
-
 export function gameFetched(game) {
     return {
         type: GAME_FETCHED,
         game 
     }
 }
-
 export function gameUpdated(game) {
     return {
         type: GAME_UPDATED,
         game 
     }
 }
-
 export function gameDeleted(gameId) {
     return {
         type: GAME_DELETED,
