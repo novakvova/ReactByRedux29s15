@@ -10,6 +10,8 @@ import GameFormPage from "./components/GameFormPage";
 import NavigationBar from "./NavigationBar";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import LoginPage from './components/login/LoginPage';
+import GetValues from './components/GetValues';
 
 class App extends Component {
   render() {
@@ -20,6 +22,10 @@ class App extends Component {
         <Route exact path='/counter' component={Counter} />
         <Route exact path='/counterdec' component={CounterDecrement} />
         <Route exact path='/counterpage' component={CounterPage} />
+        
+        <Route exact path='/login' component={LoginPage} />
+        <Route exact path='/values' component={GetValues} />
+
         <Route exact path='/games' component={GamesPage} />
         <Route exact path='/games/new' component={GameFormPage} />
         <Route path='/game/:id'  component={GameFormPage} />

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+
 export const INC_COUNTER='INCREMENT';
 export const DEC_COUNTER='DECREMENT';
 

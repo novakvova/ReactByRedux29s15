@@ -8,6 +8,8 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
 
 import rootReducer from "./rootReducer";
+import setAuthorizationToken from './utils/setAutorizationToken';
+import { setCurrentUser } from './actions/authActions';
 
 const store = createStore(
     rootReducer,
@@ -15,6 +17,11 @@ const store = createStore(
         applyMiddleware(thunk)
     )
 );
+
+if(localStorage.jwtToken) {
+    setAuthorizationToken(localStorage.jwtToken);
+    store.dispatch(setCurrentUser({id: 1, username: 'semen'}))
+}
 
 ReactDOM.render(
     <BrowserRouter>
