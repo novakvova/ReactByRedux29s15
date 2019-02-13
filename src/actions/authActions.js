@@ -20,3 +20,8 @@ export function login(data) {
         });
     }
 }
+export function register(data) {
+    return dispatch => {
+        return axios.post('http://localhost:64729/api/account/register',data);
+    }
+}

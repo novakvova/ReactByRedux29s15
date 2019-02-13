@@ -7,7 +7,7 @@ class SignupForm extends Component {
     state = { 
         email: '',
         password: '',
-        passwordConfirmation: '',
+        confirmPassword: '',
         errors: {
             //password: "Вкажи пароль"
         },
@@ -39,15 +39,26 @@ class SignupForm extends Component {
     onSubmitForm=(e) => {
         e.preventDefault();
 
+        const {email, password, сonfirmPassword} = this.state;
         //validation
         let errors = {};
-        if (this.state.email === '') errors.email = "Cant't be empty!"
-        if (this.state.password === '') errors.password = "Cant't be empty!"
-        if (this.state.passwordConfirmation === '') errors.passwordConfirmation = "Cant't be empty!"
+        if (email === '') errors.email = "Cant't be empty!"
+        if (password === '') errors.password = "Cant't be empty!"
+        if (сonfirmPassword === '') errors.confirmPassword = "Cant't be empty!"
 
         const isValid=Object.keys(errors).length===0
         if (isValid) {
-            this.setState({done: true});
+            
+            this.props.register(
+                {
+                    Email: email,
+                    Password: password,
+                    ConfirmPassword: сonfirmPassword
+                }).then(
+                    ()=> this.setState({done: true}),
+                    (err)=> this.setState({ errors: err.response.data })
+                );
+            //this.setState({done: true});
             // const {identifier, password} = this.state;
             // this.setState({isLoading: true});
             // this.props.login({identifier, password})
@@ -99,15 +110,15 @@ class SignupForm extends Component {
                     {!!errors.password ? <span className="help-block">{errors.password}</span> : ''}
                 </div>
 
-                <div className={classnames('form-group', { 'has-error': !!errors.passwordConfirmation })}>
-                    <label htmlFor="passwordConfirmation">Підтвердженян пароль</label>
+                <div className={classnames('form-group', { 'has-error': !!errors.confirmPassword })}>
+                    <label htmlFor="сonfirmPassword">Підтвердженян пароль</label>
                     <input type="password"
                         className="form-control"
-                        id="passwordConfirmation"
-                        name="passwordConfirmation"
-                        value={this.state.passwordConfirmation}
+                        id="сonfirmPassword"
+                        name="сonfirmPassword"
+                        value={this.state.сonfirmPassword}
                         onChange={this.handleChange} />
-                    {!!errors.passwordConfirmation ? <span className="help-block">{errors.passwordConfirmation}</span> : ''}
+                    {!!errors.confirmPassword ? <span className="help-block">{errors.confirmPassword}</span> : ''}
                 </div>
 
                 <div className="form-group">
@@ -125,6 +136,10 @@ class SignupForm extends Component {
             //form
          );
     }
+}
+
+SignupForm.propTypes = {
+    register: PropTypes.func.isRequired
 }
  
 export default SignupForm;

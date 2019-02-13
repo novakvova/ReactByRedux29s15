@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { login } from "../../actions/authActions";
+import { Redirect } from "react-router";
 
 class LoginForm extends Component {
     state = { 
@@ -106,7 +107,9 @@ class LoginForm extends Component {
             </form>
         );
         return ( 
-            form
+            this.state.done ?
+                    <Redirect to="/games" /> :
+                    form
          );
     }
 }
