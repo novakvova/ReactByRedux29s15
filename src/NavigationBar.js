@@ -23,7 +23,7 @@ class NavigationBar extends Component {
                             <li><a href="#">Contact</a></li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
-                            <li><a href="../navbar-static-top/">Sign up</a></li>
+                            <li><Link to="/register">Sign up</Link></li>
                             <li><Link to="/login">Sign in</Link></li>
                         </ul>
                     </div>
