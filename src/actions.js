@@ -11,7 +11,9 @@ export const GAME_FETCHED="GAME_FETCHED";
 export const GAME_UPDATED="GAME_UPDATED";
 export const GAME_DELETED="GAME_DELETED";
 
+export const ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE';
 
+/************** games actions *********************/
 export function setGames(games) {
     return {
         type: SET_GAMES,
@@ -43,6 +45,15 @@ export function gameDeleted(gameId) {
     }
 }
 
+/************** flashMessage actions *********************/
+export function addFlashMessage(message) {
+    return {
+      type: ADD_FLASH_MESSAGE,
+      message
+    }
+}
+
+/************** games function AJAX *********************/
 export function saveGame(data){
 
     return dispatch => {
@@ -65,7 +76,6 @@ export function updateGame(data){
           });
       };
 }
-
 export function fetchGames() {
     return dispatch => {
         fetch('http://localhost:64729/api/game')
@@ -76,7 +86,6 @@ export function fetchGames() {
         });
     }
 }
-
 export function fetchGame(id) {
     return dispatch => {
         fetch(`http://localhost:64729/api/game/${id}`)
@@ -87,7 +96,6 @@ export function fetchGame(id) {
         });
     }
 }
-
 export function deleteGame(id){
 
     return dispatch => {

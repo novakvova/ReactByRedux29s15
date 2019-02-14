@@ -55,7 +55,13 @@ class SignupForm extends Component {
                     Password: password,
                     ConfirmPassword: сonfirmPassword
                 }).then(
-                    ()=> this.setState({done: true}),
+                    ()=> {
+                        this.props.addFlashMessage({
+                            type: 'success',
+                            text: 'Реєстрація пройшла успішно'
+                        });
+                         this.setState({done: true})
+                        },
                     (err)=> this.setState({ errors: err.response.data })
                 );
             //this.setState({done: true});
